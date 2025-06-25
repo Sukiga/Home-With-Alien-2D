@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class GamePanel extends JPanel implements Runnable{
     
     // SCREEN SETTINGS
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // thread is like a game clock that you can start and stop.
+    Player player = new Player(this, keyH); // put a player in the window.
 
     // set player's default position
     int playerX = 100;
@@ -88,19 +91,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update() {
 
-        // positions: the further it is right and downwards, the bigger the number
-        if (keyH.upPressed == true) {
-            playerY -= playerSpeed; 
-        }
-        if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-        }
-        if (keyH.leftPressed == true) {
-            playerX -= playerSpeed;
-        }
-        if (keyH.rightPressed == true) {
-            playerX += playerSpeed;
-        }
+        player.update();
+        
 
     }
 
@@ -110,12 +102,14 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D) g; // turning g into a more controllable sophisticated object
 
-        g2.setColor(Color.white); // we set a color to use for drawing objects
-
-        g2.fillRect(playerX, playerY, tileSize, tileSize); // draw a rectangle in the size of a tile
+        player.draw(g2);
 
         g2.dispose(); // dispose of this graphics context and release any 
 
+    }
+
+    public int getTileSize() {
+        return this.tileSize;
     }
 
 
